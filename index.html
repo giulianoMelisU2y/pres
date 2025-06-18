@@ -69,23 +69,11 @@
         }
 
         .frame-1 .eudr-image img {
-            width: 200px; /* Ho aumentato la larghezza per adattarla meglio al 300px */
-            height: 130px; /* Ho aumentato l'altezza proporzionalmente */
-            object-fit: cover;
+            width: 200px; /* Larghezza adattata per il banner 300px */
+            height: 130px; /* Altezza proporzionale */
+            object-fit: contain; /* Utilizza 'contain' per assicurare che l'immagine sia completamente visibile senza ritagliarsi */
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Fallback per immagine non trovata */
-        .frame-1 .eudr-image img:not([src]), 
-        .frame-1 .eudr-image img[src=""] {
-            background: linear-gradient(135deg, #7dd3c9 0%, #a8e6d8 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #2d5e5e;
-            font-weight: bold;
-            font-size: 14px;
         }
 
         .frame-1 .title {
@@ -434,23 +422,6 @@
             background: #fca326;
             transform: scale(1.2);
         }
-
-        /* Animazioni */
-        @keyframes bounceIn {
-            0% { opacity: 0; transform: scale(0.3); }
-            50% { opacity: 1; transform: scale(1.1); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes cardPulse {
-            0%, 100% { box-shadow: 0 4px 15px rgba(45, 94, 94, 0.1); }
-            50% { box-shadow: 0 6px 20px rgba(45, 94, 94, 0.2); }
-        }
     </style>
 </head>
 <body>
@@ -466,13 +437,10 @@
 
         <div class="frame frame-1 active">
             <div class="eudr-image">
-                <img src="https://raw.githubusercontent.com/giulianoMelisU2y/rep/refs/heads/main/regolamento-eudr.webp" alt="Regolamento EUDR - Deforestazione" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <div style="display:none; width:200px; height:130px; background:linear-gradient(135deg, #7dd3c9 0%, #a8e6d8 100%); border-radius:12px; display:flex; align-items:center; justify-content:center; color:#2d5e5e; font-weight:bold; font-size:14px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
-                    EUDR
-                </div>
+                <img src="https://github.com/giulianoMelisU2y/rep/blob/main/regolamento-eudr.webp?raw=true" alt="EUDR Compliance">
             </div>
             <div class="title">Hai letto di:</div>
-            <div class="article-title">"EUDR: cos'è il regolamento UE sulla deforestazione e cosa serve sapere alle aziende"</div>
+            <div class="article-title">"Titolo Articolo Letto Dinamico"</div>
         </div>
 
         <div class="frame frame-2">
@@ -683,15 +651,12 @@
          * @param {string} articleTitle Il titolo dell'articolo letto per il Frame 1.
          * @param {Array<Object>} relatedArticles Un array di oggetti per gli articoli correlati (Frame 2).
          * @param {Array<Object>} services Un array di oggetti per i servizi (Frame 3).
-         * @param {string} imageSrc L'URL dell'immagine per il Frame 1 (opzionale, se non fornito usa quella di default).
+         * @param {string} euDRImageSrc L'URL o la stringa Base64 dell'immagine EUDR per il Frame 1.
          */
-        function updateDynamicContent(articleTitle, relatedArticles, services, imageSrc) {
-            // Aggiorna l'immagine nel frame 1 se fornita
-            if (imageSrc) {
-                const img = document.querySelector('.frame-1 .eudr-image img');
-                if (img) {
-                    img.src = imageSrc;
-                }
+        function updateDynamicContent(articleTitle, relatedArticles, services, euDRImageSrc) {
+            // Aggiorna l'immagine EUDR nel frame 1
+            if (euDRImageSrc) {
+                document.querySelector('.frame-1 .eudr-image img').src = euDRImageSrc;
             }
 
             // Aggiorna il titolo dell'articolo nel frame 1
@@ -761,16 +726,31 @@
                 setTimeout(() => {
                     progressBar.classList.add('active');
                     // Regola l'offset dell'animazione per ripartire dal punto giusto
-                    // La durata rimanente dell'animazione
                     const remainingTime = (1 - currentProgress) * FRAME_DURATION; 
-                    // Se la barra era quasi finita, la facciamo ripartire da zero per evitare "flash"
-                    // Altrimenti, impostiamo il delay negativo per farla ripartire dal punto
                     progressBar.style.transitionDuration = `${FRAME_DURATION / 1000}s`; // Imposta la durata
                     progressBar.style.transitionDelay = `-${(FRAME_DURATION - remainingTime) / 1000}s`; // Imposta il delay negativo
                     
                     startTimer(); // Riprendi la rotazione automatica
                 }, 50);
             });
+
+
+            // --- Esempio di utilizzo della funzione updateDynamicContent ---
+            // Sostituisci questo con i tuoi dati dinamici reali
+            updateDynamicContent(
+                "Come ridurre l'impatto ambientale della tua azienda in 5 mosse",
+                [
+                    { category: "ESG", title: "Il futuro del reporting sostenibile per la tua azienda", url: "https://up2you.it/blog/futuro-reporting-sostenibile" },
+                    { category: "CARBON", title: "Carbon footprint aziendale: la guida completa", url: "https://up2you.it/blog/carbon-footprint-guida" },
+                    { category: "GREEN", title: "Economia circolare in pratica: esempi e benefici", url: "https://up2you.it/blog/economia-circolare" }
+                ],
+                [
+                    { icon: "🌱", title: "Carbon Management", description: "Misura e riduci le emissioni della tua azienda", url: "https://up2you.it/servizi/carbon-management" },
+                    { icon: "📊", title: "ESG Reporting", description: "Crea report conformi ai nuovi standard", url: "https://up2you.it/servizi/esg-reporting" },
+                    { icon: "🏆", title: "Net Zero Strategy", description: "La roadmap verso la neutralità climatica", url: "https://up2you.it/servizi/net-zero-strategy" }
+                ],
+                "https://github.com/giulianoMelisU2y/rep/blob/main/regolamento-eudr.webp?raw=true" // URL dell'immagine
+            );
         });
     </script>
 </body>
