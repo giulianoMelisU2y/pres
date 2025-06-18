@@ -3,525 +3,768 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Up2You Marketing Strategy</title>
+    <title>up2you Dynamic Remarketing Banner</title>
     <style>
+        /* Stili Generali e Reset */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #1DB584 0%, #00D4AA 100%);
-            color: white;
-            overflow-x: hidden;
-        }
-
-        .presentation-container {
+        /* Contenitore Principale del Banner */
+        .banner-container {
+            width: 728px;
+            height: 300px;
             position: relative;
-            width: 100%;
-            height: 100vh;
+            overflow: hidden;
+            cursor: pointer;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(45, 94, 94, 0.2);
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #2d5e5e 0%, #4a7c7c 100%);
         }
 
-        .slide {
+        /* Stili per i Frame (Slide) */
+        .frame {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
+            height: 100%;
             opacity: 0;
-            visibility: hidden;
-            transform: translateX(100px);
-            transition: all 0.6s ease;
+            transform: translateX(100%);
+            transition: all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .slide.active {
+        .frame.active {
             opacity: 1;
-            visibility: visible;
             transform: translateX(0);
         }
 
-        .slide-content {
-            max-width: 1200px;
-            width: 100%;
+        .frame.prev {
+            transform: translateX(-100%);
+        }
+
+        /* Frame 1 - Articolo letto */
+        .frame-1 {
+            background: linear-gradient(135deg, #2d5e5e 0%, #7dd3c9 100%);
             text-align: center;
         }
 
-        h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            color: white;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        .frame-1 .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            animation: bounceIn 1s ease-out;
         }
 
-        h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
+        .frame-1 .title {
+            font-size: 28px;
             color: white;
+            font-weight: bold;
+            margin-bottom: 10px;
+            animation: slideInUp 0.8s ease-out 0.3s both;
         }
 
-        h3 {
-            font-size: 1.8rem;
+        .frame-1 .article-title {
+            font-size: 18px;
+            color: #fca326;
             font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: white;
+            animation: slideInUp 0.8s ease-out 0.6s both;
+            max-height: 54px;
+            overflow: hidden;
+            line-height: 1.5;
         }
 
-        .subtitle {
-            font-size: 1.3rem;
-            opacity: 0.9;
-            margin-bottom: 3rem;
-            color: rgba(255,255,255,0.9);
+        /* Frame 2 - Altri articoli */
+        .frame-2 {
+            background: linear-gradient(135deg, #7dd3c9 0%, #a8e6d8 100%);
+            padding: 25px;
         }
 
-        .navigation {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 1rem;
-            z-index: 1000;
-        }
-
-        .nav-btn {
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            font-weight: 600;
-            font-family: inherit;
-        }
-
-        .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .slide-indicator {
-            position: fixed;
-            top: 2rem;
-            right: 2rem;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px 20px;
-            border-radius: 25px;
-            backdrop-filter: blur(10px);
-            font-weight: 600;
-            z-index: 1000;
-        }
-
-        .icon-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .icon-card {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 2rem;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .icon-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        .icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .flow-chart {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 2rem;
-            margin: 3rem 0;
-            flex-wrap: wrap;
-        }
-
-        .flow-item {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 1.5rem;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            min-width: 200px;
+        .frame-2 .header {
             text-align: center;
-            position: relative;
+            margin-bottom: 20px;
         }
 
-        .flow-arrow {
-            font-size: 2rem;
-            color: white;
-            animation: pulse 2s infinite;
+        .frame-2 .header h3 {
+            font-size: 22px;
+            color: #2d5e5e;
+            font-weight: bold;
+            margin-bottom: 5px;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
+        .frame-2 .header p {
+            font-size: 14px;
+            color: #4a7c7c;
         }
 
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .metric-card {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 1.5rem;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-        }
-
-        .metric-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: white;
-            display: block;
-        }
-
-        .metric-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-top: 0.5rem;
-        }
-
-        .timeline {
+        .articles-grid {
             display: flex;
+            gap: 12px;
             justify-content: space-between;
-            align-items: center;
-            margin: 3rem 0;
-            position: relative;
+            height: 140px;
         }
 
-        .timeline::before {
+        .article-card {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(45, 94, 94, 0.1);
+            animation: slideInUp 0.6s ease-out calc(var(--delay) * 0.2s) both;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .article-card:hover {
+            transform: scale(1.08) translateY(-8px);
+            box-shadow: 0 15px 35px rgba(45, 94, 94, 0.25);
+            border-color: #7dd3c9;
+            z-index: 5;
+        }
+
+        .article-card:hover::before {
             content: '';
             position: absolute;
-            top: 50%;
+            top: 0;
             left: 0;
             right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0.3));
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(125, 211, 201, 0.1) 0%, rgba(252, 163, 38, 0.1) 100%);
+            pointer-events: none;
         }
 
-        .timeline-item {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 1rem;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            z-index: 2;
-            max-width: 200px;
+        .article-card .category {
+            font-size: 11px;
+            color: #fca326;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            transition: color 0.3s ease;
         }
 
-        .cta-section {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 3rem;
-            border-radius: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(15px);
-            margin: 2rem 0;
+        .article-card:hover .category {
+            color: #ff8f00;
         }
 
-        .animate-float {
-            animation: float 3s ease-in-out infinite;
+        .article-card .title {
+            font-size: 13px;
+            color: #2d5e5e;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 8px;
+            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+        .article-card .read-more {
+            font-size: 11px;
+            color: #7dd3c9;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
-        .tag {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
+        .article-card:hover .read-more {
+            color: #2d5e5e;
+            transform: translateX(3px);
+        }
+
+        .article-card .read-more::after {
+            content: '→';
+            transition: transform 0.3s ease;
+        }
+
+        .article-card:hover .read-more::after {
+            transform: translateX(3px);
+        }
+
+        /* Frame 3 - Servizi */
+        .frame-3 {
+            background: linear-gradient(135deg, #fca326 0%, #ffb84d 100%);
+            padding: 25px;
+        }
+
+        .frame-3 .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .frame-3 .header h3 {
+            font-size: 22px;
             color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin: 0.25rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+            margin-bottom: 5px;
         }
 
+        .frame-3 .header p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .services-grid {
+            display: flex;
+            gap: 12px;
+            justify-content: space-between;
+            height: 140px;
+        }
+
+        .service-card {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(252, 163, 38, 0.2);
+            animation: slideInUp 0.6s ease-out calc(var(--delay) * 0.2s) both;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .service-card:hover {
+            transform: scale(1.08) translateY(-8px);
+            box-shadow: 0 15px 35px rgba(252, 163, 38, 0.35);
+            border-color: #fca326;
+            z-index: 5;
+        }
+
+        .service-card:hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(252, 163, 38, 0.1) 0%, rgba(255, 184, 77, 0.1) 100%);
+            pointer-events: none;
+        }
+
+        .service-card .icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover .icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .service-card .title {
+            font-size: 13px;
+            color: #2d5e5e;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 6px;
+            transition: color 0.3s ease;
+        }
+
+        .service-card:hover .title {
+            color: #fca326;
+        }
+
+        .service-card .description {
+            font-size: 11px;
+            color: #4a7c7c;
+            line-height: 1.4;
+            transition: color 0.3s ease;
+        }
+
+        .service-card:hover .description {
+            color: #2d5e5e;
+        }
+
+        /* Frame 4 - Logo e CTA */
+        .frame-4 {
+            background: linear-gradient(135deg, #2d5e5e 0%, #7dd3c9 100%);
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-container {
+            margin-bottom: 25px;
+            animation: bounceIn 1s ease-out;
+        }
+
+        .logo-u2y {
+            font-size: 72px;
+            font-weight: 900;
+            color: #2d5e5e;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 10px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-text {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .logo-text .up {
+            color: #7dd3c9;
+        }
+
+        .logo-text .you {
+            color: #fca326;
+        }
+
+        .tagline {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 25px;
+            animation: slideInUp 0.8s ease-out 0.3s both;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #fca326, #ffb84d);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: slideInUp 0.8s ease-out 0.6s both;
+            box-shadow: 0 6px 20px rgba(252, 163, 38, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(252, 163, 38, 0.6);
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: #fca326;
+            width: 0%;
+            transition: width 4s linear;
+            z-index: 10;
+        }
+
+        .progress-bar.active {
+            width: 100%;
+        }
+
+        /* Navigation dots */
+        .nav-dots {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #fca326;
+            transform: scale(1.2);
+        }
+
+        /* Animazioni */
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes cardPulse {
+            0%, 100% { box-shadow: 0 4px 15px rgba(45, 94, 94, 0.1); }
+            50% { box-shadow: 0 6px 20px rgba(45, 94, 94, 0.2); }
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            h2 { font-size: 2rem; }
-            .icon-grid { grid-template-columns: 1fr; }
-            .flow-chart { flex-direction: column; }
-            .timeline { flex-direction: column; gap: 1rem; }
-            .timeline::before { display: none; }
+            .banner-container {
+                width: 320px;
+                height: 250px;
+            }
+            
+            .frame {
+                padding: 15px;
+            }
+            
+            .articles-grid,
+            .services-grid {
+                flex-direction: column;
+                gap: 8px;
+                height: auto;
+            }
+            
+            .article-card,
+            .service-card {
+                padding: 10px;
+                min-height: 60px;
+            }
+
+            .article-card:hover,
+            .service-card:hover {
+                transform: scale(1.03) translateY(-3px);
+            }
+            
+            .article-card .title,
+            .service-card .title {
+                font-size: 12px;
+                -webkit-line-clamp: 2;
+            }
+
+            .article-card .description,
+            .service-card .description {
+                font-size: 10px;
+            }
+            
+            .logo-u2y {
+                font-size: 48px;
+                padding: 10px 15px;
+            }
+            
+            .logo-text {
+                font-size: 24px;
+            }
+
+            .frame-2 .header h3,
+            .frame-3 .header h3 {
+                font-size: 18px;
+            }
+
+            .frame-2 .header p,
+            .frame-3 .header p {
+                font-size: 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="slide-indicator">
-        <span id="current-slide">1</span> / <span id="total-slides">6</span>
-    </div>
+    <div class="banner-container">
+        <div class="progress-bar" id="progressBar"></div>
+        
+        <div class="nav-dots">
+            <div class="nav-dot active" onclick="goToFrame(0)"></div>
+            <div class="nav-dot" onclick="goToFrame(1)"></div>
+            <div class="nav-dot" onclick="goToFrame(2)"></div>
+            <div class="nav-dot" onclick="goToFrame(3)"></div>
+        </div>
 
-    <div class="presentation-container">
-        <!-- Slide 1: Intro -->
-        <div class="slide active">
-            <div class="slide-content">
-                <h1 class="animate-float">🎯 Sviluppo Marketing</h1>
-                <p class="subtitle">Attività in corso e prossimi passi</p>
-                <div class="icon-grid">
-                    <div class="icon-card">
-                        <span class="icon">🎯</span>
-                        <h3>Lead Generation</h3>
-                        <p>Prospect → Lead → Sales</p>
-                    </div>
-                    <div class="icon-card">
-                        <span class="icon">📊</span>
-                        <h3>Data Intelligence</h3>
-                        <p>Analisi per tutti i team</p>
-                    </div>
+        <div class="frame frame-1 active">
+            <div class="icon">📖</div>
+            <div class="title">Hai letto l'articolo</div>
+            <div class="article-title">"Come ridurre l'impatto ambientale della tua azienda in 5 mosse"</div>
+        </div>
+
+        <div class="frame frame-2">
+            <div class="header">
+                <h3>Altri articoli che potrebbero interessarti</h3>
+                <p>Approfondisci i temi della sostenibilità</p>
+            </div>
+            <div class="articles-grid">
+                <div class="article-card" style="--delay: 1" onclick="trackCardClick('article', 'Il futuro del reporting sostenibile', '#'); window.open('#', '_blank')">
+                    <div class="category">ESG</div>
+                    <div class="title">Il futuro del reporting sostenibile</div>
+                    <div class="read-more">Leggi</div>
+                </div>
+                <div class="article-card" style="--delay: 2" onclick="trackCardClick('article', 'Carbon footprint: guida completa', '#'); window.open('#', '_blank')">
+                    <div class="category">CARBON</div>
+                    <div class="title">Carbon footprint: guida completa</div>
+                    <div class="read-more">Leggi</div>
+                </div>
+                <div class="article-card" style="--delay: 3" onclick="trackCardClick('article', 'Economia circolare in pratica', '#'); window.open('#', '_blank')">
+                    <div class="category">GREEN</div>
+                    <div class="title">Economia circolare in pratica</div>
+                    <div class="read-more">Leggi</div>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 2: Current State -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>📍 Aree di Miglioramento</h2>
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <span class="metric-value">⚠️</span>
-                        <p class="metric-label">Espansione Display Network</p>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-value">🔍</span>
-                        <p class="metric-label">Keyword long-tail</p>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-value">✨</span>
-                        <p class="metric-label">Creative dinamiche</p>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-value">📄</span>
-                        <p class="metric-label">Landing specializzate</p>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-value">⏰</span>
-                        <p class="metric-label">Scheduling mirato</p>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-value">💡</span>
-                        <p class="metric-label">Ottimizzazione CPA</p>
-                    </div>
+        <div class="frame frame-3">
+            <div class="header">
+                <h3>up2you offre servizi che possono interessarti</h3>
+                <p>Soluzioni per la sostenibilità aziendale</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card" style="--delay: 1" onclick="trackCardClick('service', 'Carbon Management', '#'); window.open('#', '_blank')">
+                    <div class="icon">🌱</div>
+                    <div class="title">Carbon Management</div>
+                    <div class="description">Misura e riduci le emissioni</div>
                 </div>
-                <div class="cta-section">
-                    <h3>📋 Piano di Sviluppo</h3>
-                    <p>Analisi completata - implementazione graduale in corso</p>
+                <div class="service-card" style="--delay: 2" onclick="trackCardClick('service', 'ESG Reporting', '#'); window.open('#', '_blank')">
+                    <div class="icon">📊</div>
+                    <div class="title">ESG Reporting</div>
+                    <div class="description">Report conformi agli standard</div>
+                </div>
+                <div class="service-card" style="--delay: 3" onclick="trackCardClick('service', 'Net Zero Strategy', '#'); window.open('#', '_blank')">
+                    <div class="icon">🎯</div>
+                    <div class="title">Net Zero Strategy</div>
+                    <div class="description">Roadmap verso la neutralità</div>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 3: Google Ads Revolution -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>🎯 Ottimizzazione Google Ads</h2>
-                <div class="flow-chart">
-                    <div class="flow-item">
-                        <h3>🎯 Long-tail Keywords</h3>
-                        <p>CPC ridotti, Quality Score ↑</p>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-item">
-                        <h3>🌐 Display Network</h3>
-                        <p>Brand Awareness + Performance</p>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-item">
-                        <h3>🎨 Creative Dinamiche</h3>
-                        <p>HTML5 + Animazioni</p>
-                    </div>
-                </div>
-                <div class="tags-container" style="margin-top: 2rem;">
-                    <span class="tag">Target CPA</span>
-                    <span class="tag">Ad Scheduling</span>
-                    <span class="tag">Anti-cannibalization</span>
-                    <span class="tag">Landing Pages Mirate</span>
+        <div class="frame frame-4">
+            <div class="logo-container">
+                <div class="logo-u2y">u2y</div>
+                <div class="logo-text">
+                    <span class="up">up2</span><span class="you">you</span>
                 </div>
             </div>
+            <div class="tagline">La sostenibilità che trasforma il business</div>
+            <button class="cta-button" onclick="window.open('https://up2you.it/contatti', '_blank')">
+                Contattaci
+            </button>
         </div>
-
-        <!-- Slide 4: AI Remarketing -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>🤖 Implementazione Remarketing</h2>
-                <div class="flow-chart">
-                    <div class="flow-item">
-                        <h3>📖 Lettura Articolo</h3>
-                        <p>User engagement tracking</p>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-item">
-                        <h3>🧠 ML Engine</h3>
-                        <p>Content similarity analysis</p>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-item">
-                        <h3>🎯 Creative Dinamica</h3>
-                        <p>Personalizzazione real-time</p>
-                    </div>
-                </div>
-                <div class="cta-section">
-                    <h3>✨ Il Risultato</h3>
-                    <p>Creatività animate che si compongono dinamicamente con:</p>
-                    <div style="margin-top: 1rem;">
-                        <span class="tag">Ultimo articolo letto</span>
-                        <span class="tag">Articoli simili</span>
-                        <span class="tag">Soluzioni correlate</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 5: ML Content Engine -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>🧠 Content Intelligence</h2>
-                <div class="flow-chart">
-                    <div class="flow-item">
-                        <h3>📝 Articoli</h3>
-                        <p>Input content</p>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-item">
-                        <h3>🔤 Tokenization</h3>
-                        <p>Frasi → Token</p>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-item">
-                        <h3>📊 Embeddings</h3>
-                        <p>Token → Numeri</p>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-item">
-                        <h3>🎯 Clustering</h3>
-                        <p>Topic similarity</p>
-                    </div>
-                </div>
-                <div class="icon-grid">
-                    <div class="icon-card">
-                        <span class="icon">🔗</span>
-                        <h3>Internal Linking</h3>
-                        <p>SEO optimization automatica</p>
-                    </div>
-                    <div class="icon-card">
-                        <span class="icon">📈</span>
-                        <h3>Content Overlap</h3>
-                        <p>Identificazione ridondanze</p>
-                    </div>
-                    <div class="icon-card">
-                        <span class="icon">💡</span>
-                        <h3>Smart Suggestions</h3>
-                        <p>Connessioni cross-content</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 6: Data Observatory -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>📊 Osservatorio Marketing</h2>
-                <div class="icon-grid">
-                    <div class="icon-card">
-                        <span class="icon">💼</span>
-                        <h3>Business</h3>
-                        <p>Performance servizi<br>Lead quality metrics</p>
-                    </div>
-                    <div class="icon-card">
-                        <span class="icon">✍️</span>
-                        <h3>Content</h3>
-                        <p>Engagement articoli<br>Topic trending</p>
-                    </div>
-                    <div class="icon-card">
-                        <span class="icon">🎨</span>
-                        <h3>Brand</h3>
-                        <p>Copy performance<br>Creative effectiveness</p>
-                    </div>
-                    <div class="icon-card">
-                        <span class="icon">🔧</span>
-                        <h3>Solutions</h3>
-                        <p>User behavior<br>Feature adoption</p>
-                    </div>
-                </div>
-                <div class="cta-section">
-                    <h3>🔄 Report Automatici</h3>
-                    <p>API integration per analisi continue e personalizzate</p>
-                    <div style="margin-top: 1rem;">
-                        <span class="tag">Google Ads</span>
-                        <span class="tag">Analytics</span>
-                        <span class="tag">SEOZoom</span>
-                        <span class="tag">HubSpot</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="navigation">
-        <button class="nav-btn" onclick="previousSlide()">← Indietro</button>
-        <button class="nav-btn" onclick="nextSlide()">Avanti →</button>
     </div>
 
     <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
-        
-        document.getElementById('total-slides').textContent = totalSlides;
+        let currentFrame = 0;
+        const frames = document.querySelectorAll('.frame');
+        const dots = document.querySelectorAll('.nav-dot');
+        const progressBar = document.getElementById('progressBar');
+        let frameInterval;
 
-        function showSlide(n) {
-            slides.forEach(slide => slide.classList.remove('active'));
-            currentSlide = (n + totalSlides) % totalSlides;
-            slides[currentSlide].classList.add('active');
-            document.getElementById('current-slide').textContent = currentSlide + 1;
-        }
+        /**
+         * Mostra il frame specificato dall'indice.
+         * @param {number} index L'indice del frame da mostrare.
+         */
+        function showFrame(index) {
+            // Rimuovi le classi 'active' e 'prev' da tutti i frame e i dot
+            frames.forEach(frame => {
+                frame.classList.remove('active', 'prev');
+            });
+            dots.forEach(dot => dot.classList.remove('active'));
 
-        function nextSlide() {
-            showSlide(currentSlide + 1);
-        }
-
-        function previousSlide() {
-            showSlide(currentSlide - 1);
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowRight' || e.key === ' ') {
-                e.preventDefault();
-                nextSlide();
-            } else if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                previousSlide();
+            // Aggiungi la classe 'prev' al frame precedente per l'animazione di uscita
+            if (frames[currentFrame]) {
+                frames[currentFrame].classList.add('prev');
             }
+
+            // Aggiorna l'indice del frame corrente
+            currentFrame = index;
+
+            // Aggiungi le classi 'active' al nuovo frame e al dot corrispondente
+            frames[currentFrame].classList.add('active');
+            dots[currentFrame].classList.add('active');
+
+            // Resetta e avvia la barra di progresso
+            progressBar.classList.remove('active');
+            // Un piccolo ritardo per permettere al browser di resettare l'animazione
+            setTimeout(() => {
+                progressBar.classList.add('active');
+            }, 50); 
+        }
+
+        /**
+         * Passa al frame successivo.
+         */
+        function nextFrame() {
+            const nextIndex = (currentFrame + 1) % frames.length;
+            showFrame(nextIndex);
+        }
+
+        /**
+         * Naviga direttamente a un frame e resetta il timer.
+         * @param {number} index L'indice del frame a cui andare.
+         */
+        function goToFrame(index) {
+            showFrame(index);
+            resetTimer();
+        }
+
+        /**
+         * Avvia il timer per la rotazione automatica dei frame.
+         */
+        function startTimer() {
+            // Cancella qualsiasi timer esistente per evitare duplicati
+            clearInterval(frameInterval); 
+            frameInterval = setInterval(nextFrame, 4000); // Cambia frame ogni 4 secondi
+        }
+
+        /**
+         * Resetta il timer per la rotazione automatica dei frame.
+         */
+        function resetTimer() {
+            clearInterval(frameInterval);
+            startTimer();
+        }
+
+        /**
+         * Aggiunge indicatori visivi di cliccabilità alle card.
+         */
+        function addClickableIndicators() {
+            const clickableCards = document.querySelectorAll('.article-card, .service-card');
+            
+            clickableCards.forEach(card => {
+                // Aggiungi l'animazione di pulsazione iniziale
+                setTimeout(() => {
+                    card.style.animation += ', cardPulse 2s ease-in-out 2s infinite';
+                }, 1000);
+                
+                // Rimuovi l'animazione di pulsazione al passaggio del mouse
+                card.addEventListener('mouseenter', function() {
+                    this.style.animation = this.style.animation.replace(', cardPulse 2s ease-in-out 2s infinite', '');
+                });
+                
+                // Riattiva l'animazione di pulsazione quando il mouse lascia
+                card.addEventListener('mouseleave', function() {
+                    if (!this.style.animation.includes('cardPulse')) {
+                        this.style.animation += ', cardPulse 2s ease-in-out 2s infinite';
+                    }
+                });
+            });
+        }
+
+        /**
+         * Funzione per il tracciamento dei click sulle card.
+         * @param {string} type Il tipo di card (es. 'article', 'service').
+         * @param {string} title Il titolo della card cliccata.
+         * @param {string} url L'URL associato alla card.
+         */
+        function trackCardClick(type, title, url) {
+            console.log(`Clicked ${type}: ${title} -> ${url}`);
+            // Aggiungi qui il tuo codice di tracciamento analytics (es. Google Analytics, Matomo, ecc.)
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'click', {
+                    'event_category': 'up2you_remarketing',
+                    'event_label': `${type}_${title}`,
+                    'custom_parameter_url': url
+                });
+            }
+        }
+
+        /**
+         * Aggiorna il contenuto dinamico del banner.
+         * @param {string} articleTitle Il titolo dell'articolo letto per il Frame 1.
+         * @param {Array<Object>} relatedArticles Un array di oggetti per gli articoli correlati (Frame 2).
+         * @param {Array<Object>} services Un array di oggetti per i servizi (Frame 3).
+         */
+        function updateDynamicContent(articleTitle, relatedArticles, services) {
+            // Aggiorna il titolo dell'articolo nel frame 1
+            if (articleTitle) {
+                document.querySelector('.frame-1 .article-title').textContent = `"${articleTitle}"`;
+            }
+
+            // Aggiorna gli articoli correlati nel frame 2
+            if (relatedArticles && relatedArticles.length > 0) {
+                const articleCards = document.querySelectorAll('.articles-grid .article-card');
+                relatedArticles.forEach((article, index) => {
+                    if (articleCards[index] && article) {
+                        articleCards[index].querySelector('.category').textContent = article.category || 'SOSTENIBILITÀ';
+                        articleCards[index].querySelector('.title').textContent = article.title || '';
+                        articleCards[index].onclick = () => {
+                            trackCardClick('article', article.title || '', article.url || '#');
+                            window.open(article.url || '#', '_blank');
+                        };
+                    }
+                });
+            }
+
+            // Aggiorna i servizi nel frame 3
+            if (services && services.length > 0) {
+                const serviceCards = document.querySelectorAll('.services-grid .service-card');
+                services.forEach((service, index) => {
+                    if (serviceCards[index] && service) {
+                        serviceCards[index].querySelector('.icon').textContent = service.icon || '🌱';
+                        serviceCards[index].querySelector('.title').textContent = service.title || '';
+                        serviceCards[index].querySelector('.description').textContent = service.description || '';
+                        serviceCards[index].onclick = () => {
+                            trackCardClick('service', service.title || '', service.url || '#');
+                            window.open(service.url || '#', '_blank');
+                        };
+                    }
+                });
+            }
+        }
+
+        // Inizializzazione del banner all'apertura della pagina
+        document.addEventListener('DOMContentLoaded', function() {
+            showFrame(0); // Mostra il primo frame all'avvio
+            startTimer(); // Avvia la rotazione automatica
+            addClickableIndicators(); // Aggiunge gli indicatori di cliccabilità
+
+            // --- Esempio di utilizzo della funzione updateDynamicContent ---
+            // Puoi chiamare questa funzione con i dati dinamici appropriati
+            // quando il banner viene caricato o in base a logiche specifiche.
+            //
+            /*
+            updateDynamicContent(
+                "Come ridurre l'impatto ambientale della tua azienda in 5 mosse",
+                [
+                    { category: "ESG", title: "Il futuro del reporting sostenibile", url: "https://up2you.it/blog/futuro-reporting-sostenibile" },
+                    { category: "CARBON", title: "Carbon footprint: guida completa", url: "https://up2you.it/blog/carbon-footprint-guida" },
+                    { category: "GREEN", title: "Economia circolare in pratica", url: "https://up2you.it/blog/economia-circolare" }
+                ],
+                [
+                    { icon: "🌱", title: "Carbon Management", description: "Misura e riduci le emissioni", url: "https://up2you.it/servizi/carbon-management" },
+                    { icon: "📊", title: "ESG Reporting", description: "Report conformi agli standard", url: "https://up2you.it/servizi/esg-reporting" },
+                    { icon: "🎯", title: "Net Zero Strategy", description: "Roadmap verso la neutralità", url: "https://up2you.it/servizi/net-zero-strategy" }
+                ]
+            );
+            */
         });
+
+        // Metti in pausa la rotazione e l'animazione della progress bar al passaggio del mouse sul banner
+        document.querySelector('.banner-container').addEventListener('mouseenter', function() {
+            clearInterval(frameInterval);
+            progressBar.style.transition = 'none'; // Ferma la transizione per mantenere la larghezza corrente
+            progressBar.style.width = progressBar.offsetWidth + 'px'; // Imposta la larghezza fissa
+            progressBar.style.animationPlayState = 'paused'; // Metti in pausa l'animazione della barra
+        });
+
+        // Riprendi la rotazione e l'animazione della progress bar quando il mouse esce dal banner
+        document.querySelector('.banner-container').addEventListener('mouseleave', function() {
+            // Reimposta la transizione e l'animazione per farla ripartire correttamente
+            progressBar.style.transition = 'width 4s linear';
+            progressBar.style.animationPlayState = 'running';
+            // Per far ripartire la barra, potresti doverla reimpostare a 0% e riattivare 'active'
+            // Questo dipende dal comportamento desiderato (se deve ripartire da dove era o da zero)
+            // L'implementazione attuale la fa ripartire da 0% dopo un breve delay, che è un buon default.
+            startTimer();
+        });
+
     </script>
 </body>
 </html>
